@@ -13,8 +13,20 @@ export async function RoadmapList() {
           {data.map((roadmap: any) => (
             <div key={roadmap.id} className="bg-white p-4 rounded shadow">
               <h2 className="text-xl font-bold text-gray-900">{roadmap.title}</h2>
-              <p className="text-gray-600">{roadmap.description}</p>
-              {/* <p className="text-gray-500">Created by: {roadmap.user.name}</p> */}
+              <p className="text-gray-600 text-sm">{roadmap.description}</p>
+                <p className="text-gray-500">Category: {roadmap.category}</p>
+                <p className="text-gray-500">Status: {roadmap.status}</p>
+                
+
+                <p className="text-gray-500">Created at:{new Date(roadmap.createdAt).toLocaleTimeString()} {new Date(roadmap.createdAt).toLocaleDateString()} </p>
+                {/*  upvotes is here */}
+                <p className="text-gray-500">Upvotes: {roadmap.upvotes}</p>
+                {/* <p className="text-gray-500">User: {roadmap.user.name}</p> */}  
+                    
+
+
+                    
+                                    
             </div>
           ))}   
             </div>
