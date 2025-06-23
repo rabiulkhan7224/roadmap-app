@@ -79,3 +79,35 @@ export function CommentThread({ roadmapId }: { roadmapId: string }) {
     </div>
   );
 }
+
+//  <div className="mt-4">
+                    {/* comments user can */}
+            //         <div>
+            //             <form  onSubmit={handleComment} >
+            //                 <h2 className="text-lg font-semibold mb-2">Add a Comment</h2>
+            //                 <textarea
+            //                     className="w-full p-2 rounded-xl border border-gray-300 shadow-sm mb-2"
+            //                     placeholder="Write your comment here..."
+            //                     rows={4}
+            //                 ></textarea>
+            //                 <button
+            //                     type="submit"
+            //                     className="bg-blue-500 flex justify-center items-center  text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            //                 >
+            //                      Comment  <Send className="mx-2" />
+            //                 </button>
+            //             </form>
+            //         </div>
+
+            //     <h2 className="text-lg font-semibold mb-2">Comments  <MessageCircleMore /></h2>
+            //     {data.comments && data.comments.length > 0 ? (
+            //         data.comments.map((comment: any) => (
+            //             <div key={comment._id} className="bg-white p-4 rounded-xl border shadow-sm mb-4">
+            //                 <p className="text-gray-700">{comment.text}</p>
+            //                 <p className="text-gray-500 text-sm">By: {comment.author} at {new Date(comment.createdAt).toLocaleTimeString()} {new Date(comment.createdAt).toLocaleDateString()}</p>
+            //             </div>
+            //         ))
+            //     ) : (
+            //         <p className="text-gray-500">No comments yet.</p>
+            //     )}
+            // </div>

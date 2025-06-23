@@ -1,6 +1,9 @@
 import { RoadmapList } from "@/components/RoadmapList";
+import { getServerUser } from "@/lib/getServerUser";  
 
-export default function Home() {
+export default async function Home() {
+  // const { user } = await getServerUser();
+  // console.log('User:', user);
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl text-red-500">roadmap home page</h1>

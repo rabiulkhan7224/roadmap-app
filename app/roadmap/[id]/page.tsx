@@ -1,3 +1,4 @@
+import { CommentThread } from "@/components/CommentThread";
 import { MessageCircleMore, Send } from "lucide-react";
 
 const RoadmapDetails = async ({ params }: { params: { id: string } }) => {
@@ -13,6 +14,32 @@ const RoadmapDetails = async ({ params }: { params: { id: string } }) => {
     if (!data) {
         return <div className="container mx-auto p-4">Roadmap not found.</div>;
     }
+    // handleComment
+    const handleComment = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const commentText = formData.get("comment") as string;
+        if (!commentText) return;
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/comments/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ text: commentText }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to add comment");
+            }
+
+            // Optionally, you can refresh the comments or show a success message
+            console.log("Comment added successfully");
+        } catch (error) {
+            console.error("Error adding comment:", error);
+        }
+    };
 
 
     return (
@@ -33,37 +60,7 @@ const RoadmapDetails = async ({ params }: { params: { id: string } }) => {
                 <p className="text-gray-700">Created at: {new Date(data.createdAt).toLocaleTimeString()} {new Date(data.createdAt).toLocaleDateString()}</p>
         </aside>
            </div>
-            <div className="mt-4">
-                    {/* comments user can */}
-                    <div>
-                        <form  >
-                            <h2 className="text-lg font-semibold mb-2">Add a Comment</h2>
-                            <textarea
-                                className="w-full p-2 rounded-xl border border-gray-300 shadow-sm mb-2"
-                                placeholder="Write your comment here..."
-                                rows={4}
-                            ></textarea>
-                            <button
-                                type="submit"
-                                className="bg-blue-500 flex justify-center items-center  text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                            >
-                                 Comment  <Send className="mx-2" />
-                            </button>
-                        </form>
-                    </div>
-
-                <h2 className="text-lg font-semibold mb-2">Comments  <MessageCircleMore /></h2>
-                {data.comments && data.comments.length > 0 ? (
-                    data.comments.map((comment: any) => (
-                        <div key={comment._id} className="bg-white p-4 rounded-xl border shadow-sm mb-4">
-                            <p className="text-gray-700">{comment.text}</p>
-                            <p className="text-gray-500 text-sm">By: {comment.author} at {new Date(comment.createdAt).toLocaleTimeString()} {new Date(comment.createdAt).toLocaleDateString()}</p>
-                        </div>
-                    ))
-                ) : (
-                    <p className="text-gray-500">No comments yet.</p>
-                )}
-            </div>
+            <CommentThread roadmapId={id} />
         </div>
     );
 }   
