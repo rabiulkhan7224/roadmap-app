@@ -34,12 +34,12 @@ const [mobile, setmobile] = useState(false)
     <div>
         <nav className="bg-gray-800 p-4">
             <div className="container mx-auto flex justify-between items-center">
-            <div className="text-white text-lg font-bold">Roadmap
-              
+            <div className="text-white text-lg font-bold"><Link href={"/"}>Roadmap
+              </Link>
             </div>
             <ul className=" space-x-4 hidden md:flex">
                 <li><Link href="/" className="text-gray-300 hover:text-white">Home</Link></li>
-                <li><Link href="/about" className="text-gray-300 hover:text-white">About</Link></li>
+                <li><Link href="/dashboard" className="text-gray-300 hover:text-white">Dashboard</Link></li>
             </ul>
              <div className="flex items-center space-x-4">
                 {user ? (
