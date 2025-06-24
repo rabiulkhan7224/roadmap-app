@@ -11,17 +11,15 @@ export default function Dashboard() {
                 <nav>
                     <ul className="list-none p-0 m-0 space-y-4 text-white">
                         <li><a href="#add" className="hover:underline">Add Items</a></li>
-                        <li><a href="#update" className="hover:underline">Update Items</a></li>
-                        <li><a href="#analytics" className="hover:underline">Analytics</a></li>
                     </ul>
                 </nav>
             </aside>
             {/* Main Content */}
-            <main className="container mx-auto px-2">
+            <main className="container mx-auto px-2 bg-[#748D92]">
                 <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
                 
                  <AddItems />
             </main>
         </div>
     );
-}
+}   

@@ -27,14 +27,14 @@ export default function AddItems() {
         console.log(form);
         try {
             const { data } = await instance.post('/api/admin/roadmap', { ...form });
-           toast.success(data.message)
+           toast.success(" succesfuly created roadmap item")
             setForm({
                 title: '',
                 description: '',
                 status: 'Planned',
                 category: 'Feature'
             });       
-            console.log("responce data ", data)     
+           
         } catch (error) {
             console.log(error)
             toast.error("Roadmap item not added ")

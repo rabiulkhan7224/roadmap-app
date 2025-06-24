@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import instance from "@/lib/axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import TotalComment from "./totalComment";
+import TotalComment from "./totalComment";  
 
 export default function RoadmapList() {
     const statusList = ["Planned", "In Progress", "Completed"];
@@ -33,24 +33,23 @@ export default function RoadmapList() {
 
     useEffect(() => {
         fetchData();
-        // eslint-disable-next-line
     }, [filterStatus, sortBy, search]);
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Roadmap</h1>
+            <h1 className="text-2xl text-gray-900 font-bold mb-4">Roadmap</h1>
             <p className="text-gray-700">Welcome to the roadmap application!</p>
 
-            {/* Filters */}
-            <div className="grid  gap-1 grid-flow-row ">
-                <select
+            <div className="grid  gap-1 grid-cols-1 md:grid-cols-2 ">
+                <div className=" flex items-center justify-evenly ">
+                    <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
                     className="border p-2 rounded "
                 >
                     <option value="All">All Status</option>
                     {statusList.map((s) => (
-                        <option key={s} value={s}>
+                        <option className="bg-amber-300"  key={s} value={s}>
                             {s}
                         </option>
                     ))}
@@ -59,11 +58,12 @@ export default function RoadmapList() {
                 <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="border p-2 rounded"
+                    className="border p-2 rounded-sm "
                 >
-                    <option value="recent">Sort by Recent</option>
+                    <option className="bg-amber-300" value="recent">Sort by Recent</option>
                     <option value="upvotes">Sort by Upvotes</option>
                 </select>
+                </div>
 
                 <input
                     type="text"

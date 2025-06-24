@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#  Roadmap Feedback Application
 
-## Getting Started
+An interactive roadmap platform where users can:
 
-First, run the development server:
+ * View product roadmap by status
+* Upvote features and milestones
+*  Comment, reply, and discuss roadmap items
+*  Admins can add roadmap items via a secure dashboard
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🌐 Live Links
+
+* **Frontend:** [https://roadmap-app-azure.vercel.app](https://roadmap-app-azure.vercel.app)
+* **Backend API:** [https://road-map-app-backend.vercel.app](https://road-map-app-backend.vercel.app)
+
+---
+
+## 🔑 Test Credentials
+
+### Admin Account (can add roadmap items):
+
+* **Email:** `admin@gmail.com`
+* **Password:** `123456#As`
+
+### Regular User Account:
+
+* **Email:** `labib@gmail.com`
+* **Password:** `123456`
+
+---
+
+##  Features
+
+* Clean, responsive UI (Next.js 15 + Tailwind CSS)
+*  Filter and sort roadmap items by **status**, **category**, **popularity**, or **date**
+* Upvote system (one upvote per user per item)
+* Nested comments with reply support (max depth: 3 levels)
+* Edit/Delete own comments with real-time updates
+*  Admin Dashboard to add new roadmap items
+
+---
+
+## 🛠️ Tech Stack
+
+* **Frontend:** Next.js 15, React, Tailwind CSS, Axios
+* **Backend:** Node.js, Express.js, MongoDB (Mongoose)
+* **Authentication:** Custom JWT-based Auth
+* **Deployment:** Vercel (Frontend + Backend)
+
+---
+
+## 📂 Project Structure
+
+```
+roadmap-app/
+├── frontend/
+│   ├── pages/
+│   ├── components/
+│   └── lib/axios.ts
+├── backend/
+│   ├── models/
+│   ├── routes/
+│   ├── controllers/
+│   └── server.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚡ Quick Start (Local Development)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Frontend:**
 
-## Learn More
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+**Backend:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd backend
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Ensure `.env` files are properly configured for backend connection.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📢 Additional Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Upvotes update instantly via optimistic UI
+* Comments show threaded replies with visual indentation
+* Admin route protected for adding new roadmap items
+* Responsive design for all devices
+
+---
+
+## 📧 Contact
+
+For feedback or queries, please contact: \[[mdrabiulkhanbabo@gmail.com](mailto:mdrabiulkhanbabo@gmail.com)]
+
+---
+
+Do you want me to generate this as a `.md` file ready for download? Let me know! 🚀
