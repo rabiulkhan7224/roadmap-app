@@ -1,10 +1,12 @@
 'use client';
 
+import { useAuth } from '@/context/AuthContext';
 import instance from '@/lib/axios';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 type FormData = {
   email: string;
@@ -15,7 +17,8 @@ export default function LoginForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-   
+   const {fetchUser}= useAuth()
+   const userouter = useRouter();
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -25,7 +28,11 @@ export default function LoginForm() {
       console.log( 'Login response:', res.data);
      
       toast.success('Login successful!');
-      // Save token, redirect, etc.
+      setMessage('Login successful! Redirecting...');
+      fetchUser(); 
+      userouter.push('/'); 
+      
+      
 
     } catch (err: any) {
       setMessage(`${err.response?.data?.message || 'Login failed'}`);

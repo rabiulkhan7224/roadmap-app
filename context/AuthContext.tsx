@@ -1,10 +1,12 @@
 'use client';
 import instance from "@/lib/axios";
+import axios from "axios";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface User {
   name: string;
   email: string;
+  _id: string;
 }
 
 interface AuthContextType {
@@ -20,7 +22,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await instance.get('api/auth/me');
+      const res = await instance.post('/api/auth/me',);
+  
       setUser(res.data);
     } catch {
       setUser(null);

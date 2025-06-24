@@ -1,113 +1,105 @@
 'use client';
-import {  useEffect, useState } from 'react';
-export function CommentThread({ roadmapId }: { roadmapId: string }) {
+import instance from "@/lib/axios";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
+import Link from "next/link";
+import { MessageCircle, MessageCircleReply, Pencil, Trash2 } from "lucide-react";
 
-    const [comments, setComments] = useState<any[]>([]);
-    const [content, setContent] = useState('');
+export default function CommentThread({ roadmapId }: { roadmapId: string }) {
+  const { user } = useAuth();
 
+  const [comments, setComments] = useState<any[]>([]);
+  const [content, setContent] = useState("");
+  const [replyTo, setReplyTo] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
 
-    useEffect(() => {
+  const fetchComments = async () => {
+    const res = await instance.get(`/api/comments/${roadmapId}`);
+    setComments(res.data);
+  };
 
-        async function fetchComments() {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/roadmap/${roadmapId}/comments`, { cache: 'no-store' });
-                if (!res.ok) {
-                    throw new Error('Failed to fetch comments');
-                }
-                const data = await res.json();
-                setComments(data);
-            } catch (error) {
-                console.error('Error fetching comments:', error);
-            }
-        }
+  useEffect(() => {
+    fetchComments();
+  }, [roadmapId]);
 
-        fetchComments();
-    }, [roadmapId]);
-    const handleComment = async () => {
-        if (!content.trim()) {
-            alert('Comment cannot be empty');
-            return;
-        }
+  const handleSubmit = async () => {
+    if (!user) return toast.error("You must be logged in to comment");
+    if (!content.trim()) return toast.error("Comment required");
+    await instance.post(`/api/comments/${roadmapId}`, { content, parentCommentId: replyTo });
+    setContent(""); setReplyTo(null); fetchComments();
+  };
 
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/roadmap/${roadmapId}/comments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ content }),
-            });
+  const handleDelete = async (id: string) => {
+    if (!user) return toast.error("You must be logged in to delete");
+    await instance.delete(`/api/comments/${id}`);
+    fetchComments();
+  };
 
-            if (!res.ok) {
-                throw new Error('Failed to post comment');
-            }
+  const handleEdit = async (id: string) => {
+    if (!user) return toast.error("You must be logged in to edit");
+    if (!editContent.trim()) return toast.error("Content required");
+    await instance.patch(`/api/comments/${id}`, { content: editContent });
+    setEditId(null); setEditContent(""); fetchComments();
+  };
 
-            const newComment = await res.json();
-            setComments([...comments, newComment]);
-            setContent('');
-        } catch (error) {
-            console.error('Error posting comment:', error);
-        }
-    }   
-
+  const renderComments = (items: any[], level = 0) =>
+    items.map((c) => (
+      <div key={c._id} className={`ml-${level * 4} mb-3`}>
+        <div className={`p-3 rounded border border-gray-300 ${
+          level === 0 ? "bg-gray-100" : "bg-blue-100 ml-4"
+        }`}>
+          {editId === c._id ? (
+            <div>
+              <textarea
+                className="w-full border p-2 mb-2"
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+              />
+              <button onClick={() => handleEdit(c._id)} className="bg-green-500 text-white px-3 py-1 mr-2">Save</button>
+              <button onClick={() => setEditId(null)} className="text-sm">Cancel</button>
+            </div>
+          ) : (
+            <>
+              <p className="text-sm">{c.content}</p>
+              <div className="text-xs text-gray-500 mt-1">By: {c.userId?.name || "Unknown"}</div>
+              {user && (
+                <div className="space-x-2 mt-2 flex items-center">
+                  {level < 2 && (
+                    <button onClick={() => setReplyTo(c._id)} className="text-blue-500 flex space-x-1 p-1 bg-gray-300 rounded-sm">Reply  <MessageCircleReply /></button>
+                  )}
+                  <button onClick={() => { setEditId(c._id); setEditContent(c.content); }} className="text-yellow-500 flex space-x-1 p-1 bg-gray-300 rounded-sm">Edit  <Pencil /></button>
+                  <button onClick={() => handleDelete(c._id)} className="text-red-500 flex space-x-1 p-1 bg-gray-300 rounded-sm">Delete  <Trash2 /></button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+        {c.replies?.length > 0 && renderComments(c.replies, level + 1)}
+      </div>
+    ));
 
   return (
-    <div className="mt-6">
-      <h3 className="text-md font-semibold mb-2">💬 Comments</h3>
-      <div className="space-y-3">
-        {comments?.map((c: any) => (
-          <div key={c._id} className="bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm">
-            <p>{c.content}</p>
-            <div className="text-xs text-gray-500 mt-1">by {c.author.name}</div>
-          </div>
-        ))}
+    <div>
+      <h2 className="text-lg font-semibold mb-3"><MessageCircle></MessageCircle> Comments {comments.length}</h2>
+      {renderComments(comments)}
+
+      <textarea
+        placeholder={replyTo ? "Replying..." : "Write a comment"}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        className="w-full mt-3 border p-2 rounded"
+        disabled={!user}
+      />
+      <div className="mt-2 space-x-2">
+        <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-1 rounded" disabled={!user}>Post</button>
+        {replyTo && (
+          <button onClick={() => setReplyTo(null)} className="text-sm text-gray-600">Cancel Reply</button>
+        )}
       </div>
-      <div className="mt-4">
-        <textarea
-          value={content}
-          onChange={e => setContent(e.target.value)}
-          className="w-full p-2 border rounded dark:bg-gray-900 dark:text-white"
-          placeholder="Write your comment..."
-        ></textarea>
-        <button
-          onClick={handleComment}
-          className="mt-2 px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-        >
-          Post Comment
-        </button>
-      </div>
+      {!user && <Link href='/login'><p className="text-sm text-red-500 mt-2"> Please login to comment</p></Link>}
     </div>
   );
 }
 
-//  <div className="mt-4">
-                    {/* comments user can */}
-            //         <div>
-            //             <form  onSubmit={handleComment} >
-            //                 <h2 className="text-lg font-semibold mb-2">Add a Comment</h2>
-            //                 <textarea
-            //                     className="w-full p-2 rounded-xl border border-gray-300 shadow-sm mb-2"
-            //                     placeholder="Write your comment here..."
-            //                     rows={4}
-            //                 ></textarea>
-            //                 <button
-            //                     type="submit"
-            //                     className="bg-blue-500 flex justify-center items-center  text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            //                 >
-            //                      Comment  <Send className="mx-2" />
-            //                 </button>
-            //             </form>
-            //         </div>
-
-            //     <h2 className="text-lg font-semibold mb-2">Comments  <MessageCircleMore /></h2>
-            //     {data.comments && data.comments.length > 0 ? (
-            //         data.comments.map((comment: any) => (
-            //             <div key={comment._id} className="bg-white p-4 rounded-xl border shadow-sm mb-4">
-            //                 <p className="text-gray-700">{comment.text}</p>
-            //                 <p className="text-gray-500 text-sm">By: {comment.author} at {new Date(comment.createdAt).toLocaleTimeString()} {new Date(comment.createdAt).toLocaleDateString()}</p>
-            //             </div>
-            //         ))
-            //     ) : (
-            //         <p className="text-gray-500">No comments yet.</p>
-            //     )}
-            // </div>
