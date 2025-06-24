@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./../components/navbar";
 import "./globals.css";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,10 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Navbar />
-          {children}
-          <Toaster position="top-right"
-            reverseOrder={false} />
+          <Suspense  fallback={<div>Loading...</div>}>
+            {children}
+          </Suspense>
+          <Toaster position="top-right" reverseOrder={false} />
         </AuthProvider>
       </body>
     </html>

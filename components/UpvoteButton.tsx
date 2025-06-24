@@ -26,13 +26,13 @@ export function UpvoteButton({
     }
     try {
       setLoading(true);
-      // Optimistic UI update
+    
       setUpvoted(!upvoted);
       setUpvotes((prev) => (upvoted ? prev - 1 : prev + 1));
-            // /roadmap/:id/upvote
       const res = await instance.patch(`/api/roadmap/upvote/${roadmapId}`);
       setUpvotes(res.data.upvotes);
       setUpvoted(res.data.upvoted);
+
     } catch (err) {
       toast.error("Failed to upvote. Try again.");
     } finally {

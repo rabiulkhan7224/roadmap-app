@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 export default function Navbar() {
   const router = useRouter()
 const { user ,fetchUser} = useAuth();
-console.log('user in navbar:', user)
 
 // mobile view
 const [mobile, setmobile] = useState(false)
@@ -39,7 +38,8 @@ const [mobile, setmobile] = useState(false)
             </div>
             <ul className=" space-x-4 hidden md:flex">
                 <li><Link href="/" className="text-gray-300 hover:text-white">Home</Link></li>
-                <li><Link href="/dashboard" className="text-gray-300 hover:text-white">Dashboard</Link></li>
+                {user?.isAdmin ? <li><Link href="/dashboard" className="text-gray-300 hover:text-white">Dashboard</Link></li>: ""}
+                
             </ul>
              <div className="flex items-center space-x-4">
                 {user ? (
