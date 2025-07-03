@@ -9,10 +9,13 @@ export function UpvoteButton({
   roadmapId,
   initialUpvotes,
   initialUpvoted,
+  onMutate
+  
 }: {
   roadmapId: string;
   initialUpvotes: number;
   initialUpvoted: boolean;
+  onMutate?: () => void;
 }) {
   const { user } = useAuth();
   const [upvotes, setUpvotes] = useState(initialUpvotes);
@@ -30,11 +33,15 @@ export function UpvoteButton({
       setUpvoted(!upvoted);
       setUpvotes((prev) => (upvoted ? prev - 1 : prev + 1));
       const res = await instance.patch(`/api/roadmap/upvote/${roadmapId}`);
+      
       setUpvotes(res.data.upvotes);
       setUpvoted(res.data.upvoted);
+      if (onMutate) onMutate();
 
     } catch (err) {
       toast.error("Failed to upvote. Try again.");
+       setUpvoted(upvoted);
+    setUpvotes((prev) => (upvoted ? prev + 1 : prev - 1));
     } finally {
       setLoading(false);
     }
@@ -47,7 +54,7 @@ export function UpvoteButton({
         upvoted ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700"
       }`}
       disabled={loading}
-    >
+      >
       <span>{upvoted ? "Upvoted" : "Upvote"}</span>
       <span><ThumbsUp /></span>
       <span>{upvotes}</span>
